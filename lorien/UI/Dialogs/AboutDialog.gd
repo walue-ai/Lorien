@@ -10,3 +10,4 @@ func _ready() -> void:
 	%GodotButton.pressed.connect(func() -> void: OS.shell_open("https://godotengine.org/"))
 	%KennyButton.pressed.connect(func() -> void: OS.shell_open("https://www.kenney.nl/assets/platformer-art-deluxe"))
 	%RemixIconsButton.pressed.connect(func() -> void: OS.shell_open("https://remixicon.com/"))
+	%WalueButton.pressed.connect(func() -> void: OS.shell_open("http://www.walue.ws"))
