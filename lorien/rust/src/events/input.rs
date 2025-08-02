@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-#[derive(Event)]
+#[derive(Event, Debug)]
 pub struct StrokeInputEvent {
     pub position: Vec2,
     pub pressure: f32,

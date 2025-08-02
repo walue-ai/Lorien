@@ -1,6 +1,6 @@
 use bevy::prelude::*;
-use godot::builtin::Color;
 use bevy_godot4::prelude::*;
+use godot::builtin::Color;
 
 #[derive(Component, Clone)]
 pub struct Stroke {
@@ -16,6 +16,16 @@ pub struct Stroke {
 pub struct StrokeVisual {
     pub godot_node: ErasedGd,
 }
+
+#[derive(Component)]
+pub struct ToolComponent {
+    pub tool_type: i32,
+    pub size: f32,
+    pub color: godot::builtin::Color,
+}
+
+#[derive(Component, Resource, Default)]
+pub struct ActiveTool;
 
 #[derive(Component)]
 pub struct Selected;

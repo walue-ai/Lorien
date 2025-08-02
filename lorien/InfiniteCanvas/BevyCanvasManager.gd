@@ -6,18 +6,18 @@ var current_stroke_id: int = 0
 
 signal stroke_created(stroke_data: Dictionary)
 signal tool_changed(tool_type: int, size: float, color: Color)
+signal scene_tree_updated(operation: String, data: Dictionary)
 
 func _on_bevy_stroke_created(stroke_data: Dictionary):
 	print("🦀 RUST: Received stroke_created signal from Bevy ECS: ", stroke_data)
 	stroke_created.emit(stroke_data)
 
 func _ready():
-	print("🦀 RUST: BevyCanvasManager initializing...")
+	print("🎯 GODOT: BevyCanvasManager initializing with renovated bevy_godot4 architecture...")
 	bevy_app = BevyApp.new()
 	add_child(bevy_app)
-	print("🦀 RUST: BevyApp created and added to scene tree")
+	print("🎯 GODOT: BevyCanvasManager ready with advanced scene management")
 	
-	# Connect Bevy signals if available
 	if bevy_app.has_signal("stroke_created"):
 		bevy_app.stroke_created.connect(_on_bevy_stroke_created)
 		print("🦀 RUST: Connected to Bevy stroke_created signal")
@@ -38,7 +38,7 @@ func create_stroke(points: Array, pressures: Array, color: Color, size: float, s
 	return current_stroke_id
 
 func update_tool(tool_type: int, size: float, color: Color, opacity: float = 1.0):
-	print("🦀 RUST: BevyCanvasManager.update_tool called - Type: ", tool_type, " Size: ", size, " Color: ", color)
+	print("🎯 GODOT: update_tool - Using renovated ErasedGd tool management")
 	tool_changed.emit(tool_type, size, color)
 	
 	if bevy_app:
@@ -48,75 +48,75 @@ func update_tool(tool_type: int, size: float, color: Color, opacity: float = 1.0
 			"color": color,
 			"opacity": opacity
 		}
-		bevy_app.call("send_tool_change_event", tool_data)
-		print("🦀 RUST: Sent tool change event to Bevy ECS")
+		bevy_app.call("update_tool_state", tool_data)
+		print("🎯 GODOT: Sent tool change event to renovated bevy_godot4 system")
 
 func start_stroke(position: Vector2, pressure: float):
-	print("🦀 RUST: BevyCanvasManager.start_stroke called - Position: ", position, " Pressure: ", pressure)
+	print("🎯 GODOT: start_stroke - Using renovated GodotScene spawning")
 	if bevy_app:
-		# Send stroke input event to Bevy ECS
-		var event_data = {
+		var stroke_data = {
 			"position": position,
 			"pressure": pressure,
 			"is_start": true,
 			"is_end": false
 		}
-		bevy_app.call("send_stroke_input_event", event_data)
-		print("🦀 RUST: Sent start stroke event to Bevy ECS")
+		bevy_app.call("spawn_stroke_scene", stroke_data)
+		print("🎯 GODOT: Sent start stroke event to renovated bevy_godot4 system")
 
 func add_stroke_point(position: Vector2, pressure: float):
-	print("🦀 RUST: BevyCanvasManager.add_stroke_point called - Position: ", position, " Pressure: ", pressure)
+	print("🎯 GODOT: add_stroke_point - Advanced ECS processing")
 	if bevy_app:
-		# Send stroke input event to Bevy ECS
-		var event_data = {
+		var stroke_data = {
 			"position": position,
 			"pressure": pressure,
 			"is_start": false,
 			"is_end": false
 		}
-		bevy_app.call("send_stroke_input_event", event_data)
-		print("🦀 RUST: Sent stroke point event to Bevy ECS")
+		bevy_app.call("spawn_stroke_scene", stroke_data)
+		print("🎯 GODOT: Sent stroke point event to renovated bevy_godot4 system")
 
 func end_stroke():
-	print("🦀 RUST: BevyCanvasManager.end_stroke called")
+	print("🎯 GODOT: end_stroke - Finalizing with bevy_godot4 systems")
 	if bevy_app:
-		# Send stroke input event to Bevy ECS
-		var event_data = {
+		var stroke_data = {
 			"position": Vector2.ZERO,
 			"pressure": 0.0,
 			"is_start": false,
 			"is_end": true
 		}
-		bevy_app.call("send_stroke_input_event", event_data)
-		print("🦀 RUST: Sent end stroke event to Bevy ECS")
+		bevy_app.call("spawn_stroke_scene", stroke_data)
+		print("🎯 GODOT: Sent end stroke event to renovated bevy_godot4 system")
+
+func manage_scene_operation(operation: String, data: Dictionary):
+	print("🎯 GODOT: manage_scene_operation - Using SceneTreeRef: ", operation)
+	if bevy_app:
+		bevy_app.call("manage_scene_tree", operation, data)
+		scene_tree_updated.emit(operation, data)
+		print("🎯 GODOT: Sent scene operation to renovated bevy_godot4 system")
 
 func undo():
-	print("🦀 RUST: BevyCanvasManager.undo called")
-	if bevy_app:
-		bevy_app.call("send_undo_event")
-		print("🦀 RUST: Sent undo event to Bevy ECS")
+	print("🎯 GODOT: undo - Using renovated ECS history system")
+	manage_scene_operation("undo", {})
 
 func redo():
-	print("🦀 RUST: BevyCanvasManager.redo called")
-	if bevy_app:
-		bevy_app.call("send_redo_event")
-		print("🦀 RUST: Sent redo event to Bevy ECS")
+	print("🎯 GODOT: redo - Using renovated ECS history system")
+	manage_scene_operation("redo", {})
 
 func clear_canvas():
-	print("🦀 RUST: BevyCanvasManager.clear_canvas called")
-	if bevy_app:
-		bevy_app.call("send_clear_event")
-		print("🦀 RUST: Sent clear canvas event to Bevy ECS")
+	print("🎯 GODOT: clear - Using advanced scene tree management")
+	manage_scene_operation("clear", {})
 
 func get_strokes_in_region(min_pos: Vector2, max_pos: Vector2) -> Array:
-	print("🦀 RUST: BevyCanvasManager.get_strokes_in_region called - Min: ", min_pos, " Max: ", max_pos)
+	print("🎯 GODOT: get_strokes_in_region - Using renovated spatial indexing")
 	if bevy_app:
 		var region_data = {
-			"min_pos": min_pos,
-			"max_pos": max_pos
+			"x": min_pos.x,
+			"y": min_pos.y,
+			"width": max_pos.x - min_pos.x,
+			"height": max_pos.y - min_pos.y
 		}
 		var result = bevy_app.call("get_strokes_in_region", region_data)
-		print("🦀 RUST: Retrieved ", result.size() if result else 0, " strokes from Bevy ECS")
+		print("🎯 GODOT: Retrieved ", result.size() if result else 0, " strokes from renovated bevy_godot4 system")
 		return result if result else []
 	return []
 

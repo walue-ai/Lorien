@@ -12,7 +12,7 @@ bevy = { version = "0.16", default-features = false, features = [
     "bevy_state", 
     "bevy_log"
 ] }
-bevy_godot4 = { git = "https://github.com/jrockett6/bevy_godot4", branch = "main" }
+bevy_godot4 = { path = "/home/ubuntu/bevy_godot4" }
 godot = "0.2.4"
 anyhow = "1"
 fastrand = "2.0"

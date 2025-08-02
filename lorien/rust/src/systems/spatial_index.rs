@@ -69,7 +69,7 @@ fn insert_into_quadtree(
     }
 }
 
-fn subdivide_node(commands: &mut Commands, parent_entity: Entity, parent_node: &mut QuadTreeNode) {
+fn subdivide_node(commands: &mut Commands, _parent_entity: Entity, parent_node: &mut QuadTreeNode) {
     let bounds = parent_node.bounds;
     let center = (bounds.min + bounds.max) * 0.5;
     let depth = parent_node.depth + 1;

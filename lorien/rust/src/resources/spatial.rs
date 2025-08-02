@@ -22,7 +22,7 @@ impl Default for SpatialIndex {
 }
 
 impl SpatialIndex {
-    pub fn new(bounds: BoundingBox) -> Self {
+    pub fn new(_bounds: BoundingBox) -> Self {
         Self {
             root: None,
             entity_to_node: HashMap::new(),
@@ -39,7 +39,7 @@ impl SpatialIndex {
         self.entity_to_node.remove(&entity);
     }
 
-    pub fn query_region(&self, bounds: &BoundingBox) -> Vec<Entity> {
+    pub fn query_region(&self, _bounds: &BoundingBox) -> Vec<Entity> {
         Vec::new()
     }
 }
