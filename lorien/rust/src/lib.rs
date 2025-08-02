@@ -70,7 +70,7 @@ impl BevyApp {
 fn build_app(app: &mut App) {
     println!("🦀 RUST: Initializing renovated Bevy ECS with bevy_godot4 architecture");
     
-    app.add_plugins(MinimalPlugins)
+    app
         .init_resource::<crate::components::ActiveTool>()
         .init_resource::<CanvasState>()
         .init_resource::<StrokeResources>()
