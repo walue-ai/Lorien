@@ -28,7 +28,6 @@ driver/driver="Dummy"
 
 BrushStrokeTexture="*res://BrushStroke/BrushStrokeTexture.gd"
 Utils="*res://Misc/Utils.gd"
-Config="*res://Config.gd"
 Settings="*res://Misc/Settings.gd"
 ProjectManager="*res://ProjectManager/ProjectManager.gd"
 BevyAppSingleton="*res://BevyAppSingleton.tscn"
