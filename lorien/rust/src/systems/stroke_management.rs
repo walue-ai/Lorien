@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 use crate::{
-    components::{Stroke, Dirty, BoundingBox},
+    components::{Stroke, Dirty},
     resources::{ActiveTool, CanvasState},
     events::{StrokeInputEvent, CanvasEvent},
 };

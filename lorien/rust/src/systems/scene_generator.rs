@@ -91,7 +91,7 @@ pub fn scene_generator_management_system(
             scene_node.set_position(Vector2::new(x_pos, y_pos));
             println!("🦀 RUST: Setting rectangle position to ({}, {})", x_pos, y_pos);
             
-            if let Some(mut line2d) = scene_node.get_node_or_null("Line2D") {
+            if let Some(line2d) = scene_node.get_node_or_null("Line2D") {
                 if let Ok(mut line2d_node) = line2d.try_cast::<godot::classes::Line2D>() {
                     line2d_node.set_default_color(generated_scene.color);
                     line2d_node.set_width(generated_scene.size);

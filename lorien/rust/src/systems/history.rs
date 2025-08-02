@@ -1,6 +1,5 @@
 use bevy::prelude::*;
 use bevy_godot4::prelude::*;
-use godot::prelude::*;
 use crate::{
     events::CanvasEvent,
     resources::HistoryManager,

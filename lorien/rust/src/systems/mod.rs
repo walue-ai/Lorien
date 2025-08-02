@@ -7,11 +7,9 @@ pub mod renovated_stroke;
 pub mod renovated_tools;
 pub mod scene_generator;
 
-pub use tools::*;
-pub use stroke_management::*;
 pub use spatial_index::*;
 pub use history::*;
-pub use rendering::*;
+pub use rendering::stroke_rendering_system;
 pub use renovated_stroke::*;
 pub use renovated_tools::*;
 pub use scene_generator::*;

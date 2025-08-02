@@ -1,6 +1,5 @@
 use bevy::prelude::*;
 use bevy_godot4::prelude::*;
-use godot::prelude::*;
 use crate::{
     components::{Stroke, StrokeVisual, Dirty, StrokeType},
     resources::StrokeResources,

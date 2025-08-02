@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use crate::components::{BoundingBox, QuadTreeNode};
+use crate::components::BoundingBox;
 use std::collections::HashMap;
 
 #[derive(Resource)]
