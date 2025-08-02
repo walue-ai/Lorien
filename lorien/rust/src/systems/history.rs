@@ -11,7 +11,9 @@ pub fn history_system(
     mut commands: Commands,
 ) {
     for event in canvas_events.read() {
+        println!("🦀 RUST: history_system - Recording canvas event: {:?}", event);
         history.push_event(event.clone());
+        println!("🦀 RUST: history_system - History stack size: {}", history.events.len());
     }
 }
 

@@ -11,6 +11,8 @@ pub fn spatial_index_system(
     mut nodes_query: Query<&mut QuadTreeNode>,
 ) {
     for (entity, _stroke, bounds) in strokes_query.iter() {
+        println!("🦀 RUST: spatial_index_system - Processing stroke {:?} with bounds {:?}", entity, bounds);
+        
         if spatial_index.root.is_none() {
             let root_bounds = BoundingBox {
                 min: Vec2::new(-10000.0, -10000.0),
@@ -18,9 +20,11 @@ pub fn spatial_index_system(
             };
             let root_entity = commands.spawn(QuadTreeNode::new(root_bounds, 0)).id();
             spatial_index.root = Some(root_entity);
+            println!("🦀 RUST: spatial_index_system - Created root quadtree node {:?}", root_entity);
         }
 
         if let Some(root) = spatial_index.root {
+            println!("🦀 RUST: spatial_index_system - Inserting stroke {:?} into quadtree", entity);
             insert_into_quadtree(
                 &mut commands,
                 &mut spatial_index,
@@ -29,6 +33,7 @@ pub fn spatial_index_system(
                 entity,
                 bounds,
             );
+            println!("🦀 RUST: spatial_index_system - Stroke {:?} indexed successfully", entity);
         }
     }
 }

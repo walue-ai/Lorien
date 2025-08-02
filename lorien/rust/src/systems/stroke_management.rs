@@ -16,6 +16,11 @@ pub fn stroke_creation_system(
 ) {
     for event in input_events.read() {
         if event.is_start {
+            println!("🦀 RUST: stroke_creation_system - Starting new stroke");
+            println!("🦀 RUST: - Tool: {:?}, Color: {:?}, Size: {}", 
+                active_tool.tool_type, active_tool.brush_color, active_tool.brush_size);
+            println!("🦀 RUST: - Position: {:?}, Pressure: {}", event.position, event.pressure);
+            
             let mut stroke = Stroke::new(
                 active_tool.tool_type,
                 active_tool.brush_color,
@@ -30,6 +35,9 @@ pub fn stroke_creation_system(
 
             *current_stroke = Some(entity);
             canvas_state.stroke_counter += 1;
+            
+            println!("🦀 RUST: - Created stroke entity: {:?}, Total strokes: {}", 
+                entity, canvas_state.stroke_counter);
 
             canvas_events.send(CanvasEvent::StrokeAdded {
                 entity,
@@ -39,9 +47,12 @@ pub fn stroke_creation_system(
             if let Ok(mut stroke) = strokes.get_mut(entity) {
                 stroke.add_point(event.position, event.pressure);
                 commands.entity(entity).insert(Dirty);
+                println!("🦀 RUST: stroke_creation_system - Added point to stroke {:?}, total points: {}", 
+                    entity, stroke.points.len());
             }
 
             if event.is_end {
+                println!("🦀 RUST: stroke_creation_system - Finished stroke {:?}", entity);
                 *current_stroke = None;
             }
         }
@@ -53,12 +64,22 @@ pub fn stroke_optimization_system(
     mut commands: Commands,
 ) {
     for (entity, mut stroke) in strokes.iter_mut() {
+        let original_points = stroke.points.len();
+        
         if stroke.points.len() > 2 {
             optimize_stroke_points(&mut stroke);
+            let optimized_points = stroke.points.len();
+            let removed_points = original_points - optimized_points;
+            
+            println!("🦀 RUST: stroke_optimization_system - Optimized stroke {:?}", entity);
+            println!("🦀 RUST: - Original points: {}, Optimized: {}, Removed: {}", 
+                original_points, optimized_points, removed_points);
         }
 
         if let Some(bounds) = stroke.calculate_bounds() {
             commands.entity(entity).insert(bounds);
+            println!("🦀 RUST: stroke_optimization_system - Calculated bounds for stroke {:?}: {:?}", 
+                entity, bounds);
         }
 
         commands.entity(entity).remove::<Dirty>();
