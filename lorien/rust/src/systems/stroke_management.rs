@@ -39,7 +39,7 @@ pub fn stroke_creation_system(
             println!("🦀 RUST: - Created stroke entity: {:?}, Total strokes: {}", 
                 entity, canvas_state.stroke_counter);
 
-            canvas_events.send(CanvasEvent::StrokeAdded {
+            canvas_events.write(CanvasEvent::StrokeAdded {
                 entity,
                 stroke_data: (&stroke).into(),
             });

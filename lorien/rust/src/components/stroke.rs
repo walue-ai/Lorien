@@ -23,13 +23,14 @@ pub struct Selected;
 #[derive(Component)]
 pub struct Dirty;
 
-#[derive(Component, Clone, Copy)]
+#[derive(Component, Clone, Copy, Debug)]
 pub struct BoundingBox {
     pub min: Vec2,
     pub max: Vec2,
 }
 
 #[derive(Clone, Copy, PartialEq, Eq)]
+#[derive(Debug)]
 pub enum StrokeType {
     Brush,
     Eraser,

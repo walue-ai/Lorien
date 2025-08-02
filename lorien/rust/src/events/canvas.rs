@@ -2,7 +2,7 @@ use bevy::prelude::*;
 use godot::builtin::Color;
 use crate::components::{Stroke, StrokeType};
 
-#[derive(Event, Clone)]
+#[derive(Event, Clone, Debug)]
 pub enum CanvasEvent {
     StrokeAdded {
         entity: Entity,
