@@ -19,7 +19,7 @@ pub enum CanvasEvent {
     Clear,
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct StrokeData {
     pub points: Vec<Vec2>,
     pub pressures: Vec<f32>,
