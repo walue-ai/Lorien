@@ -33,28 +33,28 @@ impl INode for BevyApp {
 #[godot_api]
 impl BevyApp {
     #[func]
-    pub fn spawn_stroke_scene(&mut self, stroke_data: Dictionary) {
+    pub fn spawn_stroke_scene(&self, stroke_data: Dictionary) {
         println!("🦀 RUST: spawn_stroke_scene called with data: {:?}", stroke_data);
     }
 
     #[func]
-    pub fn update_tool_state(&mut self, tool_data: Dictionary) {
+    pub fn update_tool_state(&self, tool_data: Dictionary) {
         println!("🦀 RUST: update_tool_state called with data: {:?}", tool_data);
     }
 
     #[func]
-    pub fn manage_scene_tree(&mut self, operation: String, data: Dictionary) {
+    pub fn manage_scene_tree(&self, operation: String, data: Dictionary) {
         println!("🦀 RUST: manage_scene_tree called: {} with data: {:?}", operation, data);
     }
 
     #[func]
-    pub fn get_strokes_in_region(&mut self, region_data: Dictionary) -> Array<Dictionary> {
+    pub fn get_strokes_in_region(&self, region_data: Dictionary) -> Array<Dictionary> {
         println!("🦀 RUST: get_strokes_in_region called with data: {:?}", region_data);
         Array::new()
     }
 
     #[func]
-    pub fn set_canvas_transform(&mut self, transform_data: Dictionary) {
+    pub fn set_canvas_transform(&self, transform_data: Dictionary) {
         println!("🦀 RUST: set_canvas_transform called with data: {:?}", transform_data);
         
         let zoom = transform_data.get("zoom").unwrap_or(Variant::nil());

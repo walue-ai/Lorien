@@ -124,6 +124,8 @@ func tool_event(event: InputEvent) -> void:
 func compute_selection(start_pos: Vector2, end_pos: Vector2) -> void:
 	var selection_rect : Rect2 = Utils.calculate_rect(start_pos, end_pos)
 	for stroke: BrushStroke in _canvas.get_strokes_in_camera_frustrum():
+		if not _bounding_box_cache.has(stroke):
+			continue
 		var bounding_box: Rect2 = _bounding_box_cache[stroke]
 		if selection_rect.intersects(bounding_box):
 			for point: Vector2 in stroke.points:
@@ -176,7 +178,7 @@ func _modify_strokes_colors(strokes: Array[BrushStroke], color: Color) -> void:
 # ------------------------------------------------------------------------------------------------
 func _build_bounding_boxes() -> void:
 	_bounding_box_cache.clear()
-	_bounding_box_cache = Utils.calculte_bounding_boxes(_canvas.get_all_strokes())
+	_bounding_box_cache = Utils.calculte_bounding_boxes(_canvas.get_strokes_in_camera_frustrum())
 	#$"../Viewport/DebugDraw".set_bounding_boxes(_bounding_box_cache.values())
 	
 # ------------------------------------------------------------------------------------------------
