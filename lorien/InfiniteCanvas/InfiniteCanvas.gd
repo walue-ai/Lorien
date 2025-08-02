@@ -26,8 +26,8 @@ const PLAYER = preload("res://Misc/Player/Player.tscn")
 var info := Types.CanvasInfo.new()
 var _is_enabled := false
 var _background_color: Color
-var _brush_color := Config.DEFAULT_BRUSH_COLOR
-var _brush_size := Config.DEFAULT_BRUSH_SIZE: set = set_brush_size
+var _brush_color := preload("res://Config.gd").DEFAULT_BRUSH_COLOR
+var _brush_size := preload("res://Config.gd").DEFAULT_BRUSH_SIZE: set = set_brush_size
 var _current_stroke: BrushStroke
 var _current_project: Project
 var _use_optimizer := true
@@ -38,8 +38,8 @@ var _player_enabled := false
 # -------------------------------------------------------------------------------------------------
 func _ready() -> void:
 	_optimizer = BrushStrokeOptimizer.new()
-	_brush_size = Settings.get_value(Settings.GENERAL_DEFAULT_BRUSH_SIZE, Config.DEFAULT_BRUSH_SIZE)
-	set_background_color(Settings.get_value(Settings.APPEARANCE_CANVAS_COLOR, Config.DEFAULT_CANVAS_COLOR))
+	_brush_size = Settings.get_value(Settings.GENERAL_DEFAULT_BRUSH_SIZE, preload("res://Config.gd").DEFAULT_BRUSH_SIZE)
+	set_background_color(Settings.get_value(Settings.APPEARANCE_CANVAS_COLOR, preload("res://Config.gd").DEFAULT_CANVAS_COLOR))
 	_active_tool._on_brush_size_changed(_brush_size)
 	_active_tool.enabled = false
 	
@@ -49,7 +49,7 @@ func _ready() -> void:
 		_bevy_manager.stroke_created.connect(_on_bevy_stroke_created)
 	
 	var constant_pressure: bool = Settings.get_value(
-		Settings.GENERAL_CONSTANT_PRESSURE, Config.DEFAULT_CONSTANT_PRESSURE)
+		Settings.GENERAL_CONSTANT_PRESSURE, preload("res://Config.gd").DEFAULT_CONSTANT_PRESSURE)
 		
 	if constant_pressure:
 		_brush_tool.pressure_curve = _constant_pressure_curve

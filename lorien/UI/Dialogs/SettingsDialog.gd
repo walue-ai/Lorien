@@ -3,6 +3,7 @@ extends PanelContainer
 
 # -------------------------------------------------------------------------------------------------
 const KEYBIND_ITEM = preload("res://UI/Components/KeybindItem.tscn")
+const Config = preload("res://Config.gd")
 
 # -------------------------------------------------------------------------------------------------
 const THEME_DARK_INDEX 	:= 0

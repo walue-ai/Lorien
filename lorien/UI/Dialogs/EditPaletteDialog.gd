@@ -91,7 +91,7 @@ func _on_NameLineEdit_text_changed(new_text: String) -> void:
 
 # -------------------------------------------------------------------------------------------------
 func _on_AddColorButton_pressed() -> void:
-	if _palette.colors.size() < Config.MAX_PALETTE_SIZE:
+	if _palette.colors.size() < preload("res://Config.gd").MAX_PALETTE_SIZE:
 		_palette_edited = true
 		var new_color := _palette.colors[_active_button_index]
 		
@@ -111,7 +111,7 @@ func _on_AddColorButton_pressed() -> void:
 	
 # -------------------------------------------------------------------------------------------------
 func _on_RemoveColorButton_pressed() -> void:
-	if _palette.colors.size() > Config.MIN_PALETTE_SIZE:
+	if _palette.colors.size() > preload("res://Config.gd").MIN_PALETTE_SIZE:
 		_palette_edited = true
 		
 		# Create a new color array with the color removed

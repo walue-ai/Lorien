@@ -4,7 +4,7 @@ extends PanelContainer
 # -------------------------------------------------------------------------------------------------
 func _ready() -> void:
 	get_parent().close_requested.connect(get_parent().hide)
-	%VersionLabel.text = "Lorien v%s" % Config.VERSION_STRING
+	%VersionLabel.text = "Lorien v%s" % preload("res://Config.gd").VERSION_STRING
 	%GithubLinkButton.pressed.connect(func() -> void: OS.shell_open("https://github.com/mbrlabs/Lorien"))
 	%LicenseButton.pressed.connect(func() -> void: OS.shell_open("https://github.com/mbrlabs/Lorien/blob/main/LICENSE"))
 	%GodotButton.pressed.connect(func() -> void: OS.shell_open("https://godotengine.org/"))

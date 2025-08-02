@@ -32,7 +32,7 @@ func _ready() -> void:
 	_visibility_notifier.screen_exited.connect(func() -> void: remove_from_group(GROUP_ONSCREEN))
 	
 	var rounding_mode: int = Settings.get_value(
-		Settings.RENDERING_BRUSH_ROUNDING, Config.DEFAULT_BRUSH_ROUNDING
+		Settings.RENDERING_BRUSH_ROUNDING, preload("res://Config.gd").DEFAULT_BRUSH_ROUNDING
 	)
 	
 	match rounding_mode:

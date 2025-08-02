@@ -26,7 +26,7 @@ func tool_event(event: InputEvent) -> void:
 	_cursor.set_pressure(1.0)
 	var pressure : float = Settings.get_value(
 		Settings.GENERAL_TOOL_PRESSURE, 
-		Config.DEFAULT_TOOL_PRESSURE
+		preload("res://Config.gd").DEFAULT_TOOL_PRESSURE
 	)
 	
 	var should_draw_circle := Input.is_key_pressed(KEY_SHIFT)

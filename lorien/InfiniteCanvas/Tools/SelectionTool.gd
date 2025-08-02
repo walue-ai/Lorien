@@ -151,7 +151,7 @@ func _paste_strokes(strokes: Array) -> void:
 	for stroke: BrushStroke in strokes:
 		var dup := _duplicate_stroke(stroke, offset)
 		dup.add_to_group(GROUP_SELECTED_STROKES)
-		dup.modulate = Config.DEFAULT_SELECTION_COLOR
+		dup.modulate = preload("res://Config.gd").DEFAULT_SELECTION_COLOR
 		duplicates.append(dup)
 	
 	_canvas.add_strokes(duplicates)
@@ -185,7 +185,7 @@ func _set_stroke_selected(stroke: BrushStroke) -> void:
 		stroke.modulate = Color.WHITE
 		stroke.add_to_group(GROUP_MARKED_FOR_DESELECTION)
 	else:
-		stroke.modulate = Config.DEFAULT_SELECTION_COLOR
+		stroke.modulate = preload("res://Config.gd").DEFAULT_SELECTION_COLOR
 		stroke.add_to_group(GROUP_STROKES_IN_SELECTION_RECTANGLE)
 			
 # ------------------------------------------------------------------------------------------------

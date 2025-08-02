@@ -38,7 +38,7 @@ func save() -> bool:
 		if !p.builtin:
 			file.set_value(p.uuid, KEY_NAME, p.name)
 			file.set_value(p.uuid, KEY_COLORS, p.colors)
-	return file.save(Config.PALETTES_PATH) == OK
+	return file.save(preload("res://Config.gd").PALETTES_PATH) == OK
 	
 # -------------------------------------------------------------------------------------------------
 func create_custom_palette(palette_name: String) -> Palette:
@@ -119,7 +119,7 @@ func _load_palettes() -> bool:
 	
 	# Load file
 	var file := ConfigFile.new()
-	if file.load(Config.PALETTES_PATH) != OK:
+	if file.load(preload("res://Config.gd").PALETTES_PATH) != OK:
 		return false
 	
 	# Create palettes
