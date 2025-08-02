@@ -77,21 +77,26 @@ fn build_app(app: &mut App) {
         .init_resource::<RenovatedToolResources>()
         .init_resource::<SpatialIndex>()
         .init_resource::<HistoryManager>()
+        .init_resource::<SceneGeneratorConfig>()
         .add_event::<CanvasEvent>()
         .add_event::<ToolChangeEvent>()
         .add_event::<StrokeInputEvent>()
+        .add_systems(Startup, scene_generator_startup_system)
         .add_systems(Update, (
             renovated_stroke_spawning_system,
             renovated_tool_management_system,
             renovated_scene_tree_system,
+            scene_generator_management_system,
         ))
         .add_systems(Update, spatial_index_system)
         .add_systems(Update, renovated_history_system);
     
     println!("🦀 RUST: Renovated bevy_godot4 systems registered successfully");
+    println!("🦀 RUST: - Scene generator startup system: ACTIVE");
     println!("🦀 RUST: - Renovated stroke spawning system: ACTIVE");
     println!("🦀 RUST: - Renovated tool management system: ACTIVE");
     println!("🦀 RUST: - Renovated scene tree system: ACTIVE");
+    println!("🦀 RUST: - Scene generator management system: ACTIVE");
     println!("🦀 RUST: - Spatial index system: ACTIVE");
     println!("🦀 RUST: - Renovated history system: ACTIVE");
 }
