@@ -1,6 +1,7 @@
-[gd_scene load_steps=17 format=3 uid="uid://c4u5gk5n2aiom"]
+[gd_scene load_steps=18 format=3 uid="uid://c4u5gk5n2aiom"]
 
 [ext_resource type="Script" path="res://InfiniteCanvas/InfiniteCanvas.gd" id="1"]
+[ext_resource type="Script" path="res://InfiniteCanvas/BevyCanvasManager.gd" id="1_bevy"]
 [ext_resource type="Script" path="res://InfiniteCanvas/PanZoomCamera.gd" id="2"]
 [ext_resource type="Curve" uid="uid://bgd7v60kyywsk" path="res://InfiniteCanvas/default_pressure_curve.tres" id="3"]
 [ext_resource type="PackedScene" uid="uid://cf3j2vavqos04" path="res://InfiniteCanvas/Cursor/BrushCursor/BrushCursor.tscn" id="4"]
@@ -80,3 +81,6 @@ script = ExtResource("9")
 [node name="BrushCursor" parent="SubViewport" instance=ExtResource("4")]
 
 [node name="SelectionCursor" parent="SubViewport" instance=ExtResource("8")]
+
+[node name="BevyCanvasManager" type="Node" parent="."]
+script = ExtResource("1_bevy")

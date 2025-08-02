@@ -18,6 +18,7 @@ const PLAYER = preload("res://Misc/Player/Player.tscn")
 @onready var _camera: Camera2D = $SubViewport/Camera2D
 @onready var _viewport: SubViewport = $SubViewport
 @onready var _grid: InfiniteCanvasGrid = $SubViewport/Grid
+@onready var _bevy_manager: BevyCanvasManager = $BevyCanvasManager
 
 @onready var _constant_pressure_curve := load("res://InfiniteCanvas/constant_pressure_curve.tres")
 @onready var _default_pressure_curve := load("res://InfiniteCanvas/default_pressure_curve.tres")
@@ -42,6 +43,11 @@ func _ready() -> void:
 	_active_tool._on_brush_size_changed(_brush_size)
 	_active_tool.enabled = false
 	
+	# Initialize Bevy canvas manager
+	if _bevy_manager:
+		_bevy_manager.tool_changed.connect(_on_bevy_tool_changed)
+		_bevy_manager.stroke_created.connect(_on_bevy_stroke_created)
+	
 	var constant_pressure: bool = Settings.get_value(
 		Settings.GENERAL_CONSTANT_PRESSURE, Config.DEFAULT_CONSTANT_PRESSURE)
 		
@@ -65,6 +71,11 @@ func _ready() -> void:
 	#_viewport.size = get_window().size
 
 	info.pen_inverted = false
+	
+	# Initialize Bevy canvas manager
+	if _bevy_manager:
+		_bevy_manager.tool_changed.connect(_on_bevy_tool_changed)
+		_bevy_manager.stroke_created.connect(_on_bevy_stroke_created)
 
 # -------------------------------------------------------------------------------------------------
 func _unhandled_key_input(event: InputEvent) -> void:
@@ -140,6 +151,9 @@ func use_tool(tool_type: int) -> void:
 	_active_tool.enabled = prev_status
 	_active_tool_type = tool_type
 	_active_tool.get_cursor()._on_zoom_changed(_camera.zoom.x)
+	
+	# Delegate tool change to Bevy ECS
+	_delegate_to_bevy_tool_change(tool_type)
 
 # -------------------------------------------------------------------------------------------------
 func set_background_color(color: Color) -> void:
@@ -217,6 +231,9 @@ func add_stroke_point(point: Vector2, pressure: float = 1.0) -> void:
 	if _use_optimizer:
 		_optimizer.optimize(_current_stroke)
 	_current_stroke.refresh()
+	
+	if _bevy_manager:
+		_delegate_to_bevy_stroke_input(point, pressure, false, false)
 
 # -------------------------------------------------------------------------------------------------
 func remove_last_stroke_point() -> void:
@@ -238,6 +255,9 @@ func start_stroke() -> void:
 	
 	_strokes_parent.add_child(_current_stroke)
 	_optimizer.reset()
+	
+	if _bevy_manager:
+		_delegate_to_bevy_stroke_input(Vector2.ZERO, 1.0, true, false)
 
 # -------------------------------------------------------------------------------------------------
 func end_stroke() -> void:
@@ -274,6 +294,9 @@ func end_stroke() -> void:
 			_current_project.undo_redo.add_do_property(info, "point_count", info.point_count + _current_stroke.points.size())
 			_current_project.undo_redo.add_do_method(_current_project.add_stroke.bind(_current_stroke))
 			_current_project.undo_redo.commit_action()
+		
+		if _bevy_manager:
+			_delegate_to_bevy_stroke_input(Vector2.ZERO, 1.0, false, true)
 		
 		_current_stroke = null
 
@@ -388,3 +411,32 @@ func _undo_delete_stroke(stroke: BrushStroke) -> void:
 	_strokes_parent.add_child(stroke)
 	info.point_count += stroke.points.size()
 	info.stroke_count += 1
+
+# Bevy integration callbacks
+func _on_bevy_tool_changed(tool_type: int, size: float, color: Color):
+	pass
+
+func _on_bevy_stroke_created(stroke_data: Dictionary):
+	var line2d = Line2D.new()
+	line2d.width = stroke_data.size
+	line2d.default_color = stroke_data.color
+	
+	for point in stroke_data.points:
+		line2d.add_point(point)
+	
+	_strokes_parent.add_child(line2d)
+
+func _delegate_to_bevy_tool_change(tool_type: int):
+	if _bevy_manager:
+		var color = _brush_color if _brush_color else Color.BLACK
+		var size = _brush_size if _brush_size else 5.0
+		_bevy_manager.update_tool(tool_type, size, color)
+
+func _delegate_to_bevy_stroke_input(position: Vector2, pressure: float, is_start: bool, is_end: bool):
+	if _bevy_manager:
+		if is_start:
+			_bevy_manager.start_stroke(position, pressure)
+		elif is_end:
+			_bevy_manager.end_stroke()
+		else:
+			_bevy_manager.add_stroke_point(position, pressure)
