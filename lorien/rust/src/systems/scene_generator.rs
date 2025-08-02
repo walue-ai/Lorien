@@ -11,6 +11,7 @@ pub struct GeneratedScene {
     pub scene_type: String,
     pub color: godot::builtin::Color,
     pub size: f32,
+    pub configured: bool,
 }
 
 #[derive(Resource)]
@@ -63,6 +64,7 @@ pub fn scene_generator_startup_system(
                 scene_type: "rectangle".to_string(),
                 color,
                 size,
+                configured: false,
             },
         )).id();
 
@@ -76,9 +78,12 @@ pub fn scene_generator_startup_system(
 
 pub fn scene_generator_management_system(
     mut _scene_tree: SceneTreeRef,
-    mut generated_scenes: Query<(Entity, &mut ErasedGd, &GeneratedScene), With<GeneratedScene>>,
+    mut generated_scenes: Query<(Entity, &mut ErasedGd, &mut GeneratedScene), With<GeneratedScene>>,
 ) {
-    for (entity, mut erased_gd, generated_scene) in generated_scenes.iter_mut() {
+    for (entity, mut erased_gd, mut generated_scene) in generated_scenes.iter_mut() {
+        if generated_scene.configured {
+            continue;
+        }
         if let Some(mut scene_node) = erased_gd.try_get::<godot::classes::Node2D>() {
             let x_pos = (entity.index() as f32 * 100.0) % 800.0;
             let y_pos = (entity.index() as f32 * 80.0) % 600.0;
@@ -102,6 +107,7 @@ pub fn scene_generator_management_system(
                 }
             }
             
+            generated_scene.configured = true;
             println!("🦀 RUST: Configured generated rectangle at position ({}, {}) with color {:?}", 
                     x_pos, y_pos, generated_scene.color);
         }
