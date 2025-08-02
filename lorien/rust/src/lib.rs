@@ -16,9 +16,7 @@ use events::*;
 fn build_app(app: &mut App) {
     println!("🦀 RUST: Initializing Bevy ECS for Lorien infinite canvas");
     
-    app.add_plugins(MinimalPlugins)
-        .add_plugins(bevy::asset::AssetPlugin::default())
-        .add_plugins(bevy::state::app::StatesPlugin)
+    app.add_plugins(DefaultPlugins.build().disable::<bevy::log::LogPlugin>())
         .init_resource::<ActiveTool>()
         .init_resource::<CanvasState>()
         .init_resource::<SpatialIndex>()
