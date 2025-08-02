@@ -89,6 +89,7 @@ pub fn scene_generator_management_system(
             let y_pos = (entity.index() as f32 * 80.0) % 600.0;
             
             scene_node.set_position(Vector2::new(x_pos, y_pos));
+            println!("🦀 RUST: Setting rectangle position to ({}, {})", x_pos, y_pos);
             
             if let Some(mut line2d) = scene_node.get_node_or_null("Line2D") {
                 if let Ok(mut line2d_node) = line2d.try_cast::<godot::classes::Line2D>() {
@@ -110,6 +111,7 @@ pub fn scene_generator_management_system(
             generated_scene.configured = true;
             println!("🦀 RUST: Configured generated rectangle at position ({}, {}) with color {:?}", 
                     x_pos, y_pos, generated_scene.color);
+            println!("🦀 RUST: Rectangle parent: {:?}", scene_node.get_parent().map(|p| p.get_name()));
         }
     }
 }
