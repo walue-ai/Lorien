@@ -1,0 +1,20 @@
+[package]
+name = "simple"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[[bin]]
+path = "../run_godot.rs"
+name = "simple"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+bevy = { version = "0.16", default-features = false, features = [
+    "bevy_asset",
+    "bevy_state",
+] }
+bevy_godot4 = { path = "../../../bevy_godot4" }
+godot = "0.2.4"
