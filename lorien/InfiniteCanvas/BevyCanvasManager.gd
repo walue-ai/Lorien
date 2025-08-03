@@ -1,7 +1,7 @@
 extends Node
 class_name BevyCanvasManager
 
-var bevy_app: BevyApp
+var bevy_app: LorienBevyManager
 var current_stroke_id: int = 0
 
 signal stroke_created(stroke_data: Dictionary)
