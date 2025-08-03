@@ -35,7 +35,6 @@ pub fn scene_generator_startup_system(
     mut commands: Commands,
     stroke_resources: Res<StrokeResources>,
     mut generator_config: ResMut<SceneGeneratorConfig>,
-    _scene_tree: SceneTreeRef,
 ) {
     if !generator_config.enabled || generator_config.generated {
         return;
