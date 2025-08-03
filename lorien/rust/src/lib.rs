@@ -6,40 +6,40 @@ mod events;
 use bevy::prelude::*;
 use bevy_godot4::prelude::*;
 use godot::prelude::*;
+use std::sync::{Arc, Mutex};
 
 use systems::*;
 use resources::*;
 use events::*;
 use components::{StrokeType, BoundingBox};
 
-static mut BEVY_APP_INSTANCE: Option<App> = None;
-
 #[derive(GodotClass)]
 #[class(base=Node)]
-pub struct BevyApp {
+pub struct LorienBevyManager {
     base: Base<Node>,
+    bevy_app: Option<Arc<Mutex<App>>>,
 }
 
 #[godot_api]
-impl INode for BevyApp {
+impl INode for LorienBevyManager {
     fn init(base: Base<Node>) -> Self {
-        println!("🦀 RUST: BevyApp Godot class initializing with bevy_godot4...");
-        Self { base }
+        println!("🦀 RUST: LorienBevyManager Godot class initializing with bevy_godot4...");
+        Self { 
+            base,
+            bevy_app: None,
+        }
     }
 
     fn ready(&mut self) {
-        println!("🦀 RUST: BevyApp::ready() called - Godot integration active");
-        unsafe {
-            if BEVY_APP_INSTANCE.is_none() {
-                BEVY_APP_INSTANCE = Some(build_app_instance());
-                println!("🦀 RUST: Bevy App instance initialized");
-            }
-        }
+        println!("🦀 RUST: LorienBevyManager::ready() called - Godot integration active");
+        let app = build_app_instance();
+        self.bevy_app = Some(Arc::new(Mutex::new(app)));
+        println!("🦀 RUST: Bevy App instance initialized");
     }
 }
 
 #[godot_api]
-impl BevyApp {
+impl LorienBevyManager {
     #[func]
     pub fn spawn_stroke_scene(&self, stroke_data: Dictionary) {
         println!("🦀 RUST: spawn_stroke_scene called with data: {:?}", stroke_data);
@@ -66,8 +66,8 @@ impl BevyApp {
             .and_then(|v| v.try_to::<bool>().ok())
             .unwrap_or(false);
         
-        unsafe {
-            if let Some(app) = &mut BEVY_APP_INSTANCE {
+        if let Some(app_arc) = &self.bevy_app {
+            if let Ok(mut app) = app_arc.lock() {
                 app.world_mut().send_event(StrokeInputEvent {
                     position,
                     pressure,
@@ -107,8 +107,8 @@ impl BevyApp {
             .and_then(|v| v.try_to::<f32>().ok())
             .unwrap_or(1.0);
         
-        unsafe {
-            if let Some(app) = &mut BEVY_APP_INSTANCE {
+        if let Some(app_arc) = &self.bevy_app {
+            if let Ok(mut app) = app_arc.lock() {
                 let stroke_type = match tool_type {
                     0 => StrokeType::Brush,
                     1 => StrokeType::Rectangle,
@@ -134,8 +134,8 @@ impl BevyApp {
     pub fn manage_scene_tree(&self, operation: String, data: Dictionary) {
         println!("🦀 RUST: manage_scene_tree called: {} with data: {:?}", operation, data);
         
-        unsafe {
-            if let Some(app) = &mut BEVY_APP_INSTANCE {
+        if let Some(app_arc) = &self.bevy_app {
+            if let Ok(mut app) = app_arc.lock() {
                 match operation.as_str() {
                     "undo" => {
                         println!("🦀 RUST: Processing undo operation");
@@ -166,8 +166,8 @@ impl BevyApp {
         let width = region_data.get("width").and_then(|v| v.try_to::<f32>().ok()).unwrap_or(0.0);
         let height = region_data.get("height").and_then(|v| v.try_to::<f32>().ok()).unwrap_or(0.0);
         
-        unsafe {
-            if let Some(app) = &mut BEVY_APP_INSTANCE {
+        if let Some(app_arc) = &self.bevy_app {
+            if let Ok(app) = app_arc.lock() {
                 if let Some(spatial_index) = app.world().get_resource::<SpatialIndex>() {
                     let _bounds = BoundingBox {
                         min: Vec2::new(x, y),
@@ -217,8 +217,8 @@ impl BevyApp {
             Vec2::new(1024.0, 768.0)
         };
         
-        unsafe {
-            if let Some(app) = &mut BEVY_APP_INSTANCE {
+        if let Some(app_arc) = &self.bevy_app {
+            if let Ok(mut app) = app_arc.lock() {
                 if let Some(mut canvas_state) = app.world_mut().get_resource_mut::<CanvasState>() {
                     canvas_state.zoom = zoom;
                     canvas_state.offset = offset;

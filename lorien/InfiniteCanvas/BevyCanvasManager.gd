@@ -14,7 +14,7 @@ func _on_bevy_stroke_created(stroke_data: Dictionary):
 
 func _ready():
 	print("🎯 GODOT: BevyCanvasManager initializing with renovated bevy_godot4 architecture...")
-	bevy_app = get_node("/root/BevyAppSingleton/BevyApp")
+	bevy_app = get_node("/root/BevyAppSingleton/LorienBevyManager")
 	print("🎯 GODOT: BevyCanvasManager connected to BevyAppSingleton")
 	
 	if bevy_app.has_signal("stroke_created"):
