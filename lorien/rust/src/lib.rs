@@ -270,5 +270,10 @@ fn build_app(app: &mut App) {
 fn build_app_instance() -> App {
     let mut app = App::new();
     build_app(&mut app);
+    
+    println!("🦀 RUST: Manually executing startup systems...");
+    app.world_mut().run_schedule(bevy::app::Startup);
+    println!("🦀 RUST: Startup systems executed");
+    
     app
 }
