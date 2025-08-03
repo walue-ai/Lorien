@@ -255,7 +255,8 @@ fn build_app(app: &mut App) {
             stroke_rendering_system,
         ))
         .add_systems(Update, spatial_index_system)
-        .add_systems(Update, renovated_history_system);
+        .add_systems(Update, renovated_history_system)
+        .add_systems(PostUpdate, spawn_godot_scenes);
     
     println!("🦀 RUST: Renovated bevy_godot4 systems registered successfully");
     println!("🦀 RUST: - Scene generator startup system: ACTIVE");
@@ -275,5 +276,47 @@ fn build_app_instance() -> App {
     app.world_mut().run_schedule(bevy::app::Startup);
     println!("🦀 RUST: Startup systems executed");
     
+    println!("🦀 RUST: Triggering Update systems to process scene generator entities...");
+    app.update();
+    println!("🦀 RUST: Update systems executed");
+    
     app
+}
+
+fn spawn_godot_scenes(
+    mut commands: Commands,
+    mut new_scenes: Query<(Entity, &GodotScene), (With<GodotScene>, Without<ErasedGd>)>,
+    mut scene_tree: SceneTreeRef,
+) {
+    use godot::prelude::Node;
+    
+    println!("🦀 RUST: spawn_godot_scenes running, found {} entities to process", new_scenes.iter().count());
+    
+    for (entity, _scene) in new_scenes.iter_mut() {
+        println!("🦀 RUST: Processing GodotScene entity {:?} for spawning", entity);
+        
+        let instance = godot::classes::Node2D::new_alloc();
+        
+        match scene_tree
+            .get()
+            .get_root()
+            .unwrap()
+            .get_node_or_null("BevyAppSingleton")
+        {
+            Some(mut app) => {
+                app.add_child(&instance.clone().upcast::<Node>());
+                println!("🦀 RUST: Added scene instance to BevyAppSingleton");
+            },
+            None => {
+                println!("🦀 RUST: ERROR: BevyAppSingleton autoload not found");
+                continue;
+            }
+        }
+        
+        commands
+            .entity(entity)
+            .insert(ErasedGd::new(instance.upcast::<Node>()));
+        
+        println!("🦀 RUST: Successfully spawned GodotScene entity {:?} with ErasedGd", entity);
+    }
 }

@@ -2,7 +2,7 @@ use bevy::prelude::*;
 use bevy_godot4::prelude::*;
 use godot::prelude::*;
 use crate::{
-    components::{Stroke, StrokeType},
+    components::{Stroke, StrokeType, Dirty},
     resources::StrokeResources,
 };
 
@@ -65,6 +65,7 @@ pub fn scene_generator_startup_system(
                 size,
                 configured: false,
             },
+            Dirty,
         )).id();
 
         println!("🦀 RUST: Generated rectangle entity {:?} - Color: {:?}, Size: {}", 
@@ -76,7 +77,6 @@ pub fn scene_generator_startup_system(
 }
 
 pub fn scene_generator_management_system(
-    mut _scene_tree: SceneTreeRef,
     mut generated_scenes: Query<(Entity, &mut ErasedGd, &mut GeneratedScene), With<GeneratedScene>>,
 ) {
     for (entity, mut erased_gd, mut generated_scene) in generated_scenes.iter_mut() {

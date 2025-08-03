@@ -60,7 +60,6 @@ pub fn renovated_history_system(
     mut history: ResMut<HistoryManager>,
     mut canvas_events: EventReader<CanvasEvent>,
     _commands: Commands,
-    _scene_tree: SceneTreeRef,
     _stroke_nodes: Query<(Entity, &mut ErasedGd), With<Stroke>>,
 ) {
     for event in canvas_events.read() {
@@ -73,7 +72,6 @@ pub fn renovated_history_system(
 pub fn renovated_undo_system(
     mut history: ResMut<HistoryManager>,
     mut commands: Commands,
-    mut _scene_tree: SceneTreeRef,
     mut stroke_nodes: Query<(Entity, &mut ErasedGd), With<Stroke>>,
 ) {
     if let Some(event) = history.undo() {
@@ -81,7 +79,6 @@ pub fn renovated_undo_system(
             CanvasEvent::StrokeAdded { entity, .. } => {
                 if let Ok((stroke_entity, mut erased_gd)) = stroke_nodes.get_mut(*entity) {
                     if let Some(stroke_node) = erased_gd.try_get::<godot::classes::Node2D>() {
-                        let _scene_tree_ref = _scene_tree.get();
                         if let Some(mut parent) = stroke_node.get_parent() {
                             parent.remove_child(&stroke_node);
                         }
@@ -102,7 +99,6 @@ pub fn renovated_undo_system(
 pub fn renovated_redo_system(
     mut history: ResMut<HistoryManager>,
     mut commands: Commands,
-    _scene_tree: SceneTreeRef,
     stroke_resources: Res<crate::resources::StrokeResources>,
 ) {
     if let Some(event) = history.redo() {
